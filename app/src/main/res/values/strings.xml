@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MyJurnl</string>
+
+    <string name="journal_entry_string">Journal Entry</string>
+    <string name="take_picture_button">TakePicture</string>
+    <string name="submit_entry_string">Submit Entry</string>
+
+    <string name="no_notes_yet">You haven\'t created any notes yet.</string>
+</resources>

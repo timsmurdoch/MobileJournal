@@ -29,6 +29,7 @@ import java.util.Date;
 import static android.app.Activity.RESULT_OK;
 
 public class makeNoteFragment extends Fragment implements View.OnClickListener{
+
         DatabaseHelper myDb;
         String timeStamp;
         String myAuthor = "Default";
@@ -48,7 +49,8 @@ public class makeNoteFragment extends Fragment implements View.OnClickListener{
 
         makeNoteFragment f = new makeNoteFragment();
         return f;
-    }
+        }
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -82,21 +84,21 @@ public class makeNoteFragment extends Fragment implements View.OnClickListener{
         public void onViewCreated (View v, Bundle savedInstanceState){
             super.onViewCreated(v, savedInstanceState);
             if (savedInstanceState != null) {
-
-                //image = makeNote.findViewById(R.id.journal_photo);
                 photoPath = savedInstanceState.getString("photoPath");
                 Log.d("tag", "MYPHOTOPATH" +photoPath);
                 Log.d("tag", "IMAGE ID VIEW" +image);
                 previewImage();
             }
         }
+
         @Override
         public void onAttach(Context context){
             super.onAttach(context);
             myDb = new DatabaseHelper(context);
         }
 
-    @Override
+        //When a button is clicked do something
+        @Override
         public void onClick(View v){
             switch (v.getId()){
                 case R.id.take_picture:
@@ -114,7 +116,7 @@ public class makeNoteFragment extends Fragment implements View.OnClickListener{
                     break;
             }
         }
-
+        //Sends the info to the database and gives a response with toasts
         public void sendToDatabase(){
             //MATT - Changed author to note title, and added a bitmap field
             Log.d("TAG", "sending started" + " " + myTitle.getText().toString()
@@ -132,25 +134,24 @@ public class makeNoteFragment extends Fragment implements View.OnClickListener{
 
         public void dispatchTakePictureIntent () {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            // Ensure that there's a camera activity to handle the intent
+            //Makes sure the camera can be used
             if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                // Create the File where the photo should go
+                //Creating file for photo
                 File photoFile = null;
                 try {
                     photoFile = createImageFile();
                 } catch (IOException ex) {
 
                 }
-                // Continue only if the File was successfully created
+                //check if the file has been made
                 if (photoFile != null) {
                     Uri photoURI = FileProvider.getUriForFile(myContext, "com.example.myjurnl.fileprovider", photoFile);
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                     startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
                 }
-
             }
         }
-
+        //After the image has been taken and stored preview the image
         @Override
         public void onActivityResult ( int requestCode, int resultCode, Intent data){
             super.onActivityResult(requestCode, resultCode, data);
@@ -158,7 +159,7 @@ public class makeNoteFragment extends Fragment implements View.OnClickListener{
                 previewImage();
             }
         }
-
+        //Used to put the preview image in the image view
         public void previewImage () {
             Log.d("tag", "MYPHOTOPATHINPREVIEWIMAGE" +photoPath);
             File imgFile = new File(photoPath);
@@ -166,9 +167,9 @@ public class makeNoteFragment extends Fragment implements View.OnClickListener{
                 image.setImageURI(Uri.fromFile(imgFile));
             }
         }
-
+        //Makes the name and location of the file
         private File createImageFile () throws IOException {
-            // Create an image file name
+            //file name from the date and time
             timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             Log.d(timeStamp, "TIMESTAMP");
             //can add more values to file name if needed
@@ -177,10 +178,11 @@ public class makeNoteFragment extends Fragment implements View.OnClickListener{
 
             File image = File.createTempFile(imageFileName, ".jpg", storageDir);
             Log.d(imageFileName, "FILENAME");
-            // Save a file: path for use with ACTION_VIEW intents
+
             photoPath = image.getAbsolutePath();
             return image;
         }
+        //adds the image to the gallery
         private void galleryAddPic () {
             Log.d("tag", "GalleryAddPic");
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -220,7 +222,7 @@ public class makeNoteFragment extends Fragment implements View.OnClickListener{
                 e.printStackTrace();
             }
         }
-
+        //Saves the photo path when changing orientation
         @Override
         public void onSaveInstanceState (Bundle outState  ){
             super.onSaveInstanceState(outState);

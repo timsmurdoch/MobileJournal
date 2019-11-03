@@ -115,11 +115,8 @@ public class ViewNoteFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
             }
         });
-
         AlertDialog dialog = builder.create();
         dialog.show();
-
-
     }
 
     public void getNote() {
